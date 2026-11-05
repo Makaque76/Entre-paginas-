@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#344638">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png" type="image/png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default"><title>Entre páginas | Bitácora de lectura</title>
+<style>
+:root{--green:#344638;--sage:#788875;--paper:#f7f3e9;--card:#fffdf7;--line:#e4ddce;--ink:#29352d;--muted:#77796f;--gold:#b28a52}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 Georgia,serif}
+header{background:var(--green);color:#f8f3e8;padding:22px max(18px,calc((100% - 1120px)/2));display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-size:28px}.tagline{font:11px Arial,sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:#d8dfd4}
+main{max-width:1120px;margin:24px auto;padding:0 18px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat,.panel,.book,.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:15px;box-shadow:0 3px 12px #43351b08}.stat strong{display:block;font-size:25px;font-weight:normal;color:var(--green)}.stat span{font:11px Arial;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:22px 0 14px}h1{font-size:25px;font-weight:normal;margin:0}h2{font-size:20px;font-weight:normal;margin:0 0 13px}h3{font-weight:normal}
+button,.btn{border:0;border-radius:7px;padding:10px 14px;background:var(--green);color:white;cursor:pointer;font:13px Arial,sans-serif;text-decoration:none;display:inline-block}button.light,.btn.light{background:#e9e4d8;color:var(--ink)}button.red{background:#8c5148}button.sm{padding:6px 9px;font-size:12px}
+input,select,textarea{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:6px;background:#fffefa;color:var(--ink);font:14px Arial,sans-serif}textarea{min-height:100px;resize:vertical;font:15px/1.5 Georgia,serif}
+label{display:block;font:12px Arial,sans-serif;color:var(--muted);margin:0 0 5px}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}.toolbar input{flex:1;min-width:190px}.toolbar select{width:auto;min-width:150px}
+.tabs{display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:22px 0 17px}.tab{background:transparent;color:var(--muted);border-radius:6px 6px 0 0}.tab.active{background:var(--green);color:white}
+.books{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.book{display:flex;gap:13px;min-height:160px}.cover{width:82px;min-width:82px;height:120px;background:#e8e0cf;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#7b725f;text-align:center;padding:6px;font-size:12px;overflow:hidden}.cover img{width:100%;height:100%;object-fit:cover}.book h3{font-size:17px;margin:0 0 2px}.book p,.muted{margin:2px 0;color:var(--muted);font-size:13px}.badge{display:inline-block;margin-top:6px;padding:3px 8px;border-radius:20px;background:#e8ede5;color:#405844;font:11px Arial}
+.actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.empty{padding:32px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:10px}
+.modal{position:fixed;inset:0;background:#17201899;display:none;align-items:center;justify-content:center;padding:14px;z-index:5}.modal.show{display:flex}.dialog{background:var(--paper);border-radius:12px;padding:20px;width:min(720px,100%);max-height:92vh;overflow:auto}.dialoghead{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.dialoghead h2{margin:0}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}
+.item{margin:10px 0}.itemhead{display:flex;justify-content:space-between;gap:12px;align-items:start}.item blockquote{margin:0 0 7px;font-size:17px;white-space:pre-wrap}.item p{margin:4px 0;color:var(--muted);font-size:13px}.rich{min-height:130px;padding:11px;border:1px solid var(--line);border-radius:6px;background:white;outline:none}.rich:empty:before{content:attr(data-placeholder);color:#999}.authorcard{display:flex;gap:15px;align-items:flex-start}.authorpic{width:78px;height:78px;object-fit:cover;border-radius:50%;background:#e8e0cf}.link{color:#536e57;overflow-wrap:anywhere}footer{text-align:center;color:var(--muted);font:12px Arial;padding:25px}
+@media(max-width:820px){.books{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){header{padding:17px}.brand{font-size:24px}.books,.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.book{min-height:140px}main{margin:18px auto}}
+</style></head>
+<body>
+<header><div><div class="brand">Entre páginas</div><div class="tagline">Mi bitácora de lectura</div></div><div style="font-size:13px;color:#e1e5dc">Leer · Subrayar · Recordar</div></header>
+<main>
+<section class="stats"><div class="stat"><strong id="nBooks">0</strong><span>Libros</span></div><div class="stat"><strong id="nReading">0</strong><span>En lectura</span></div><div class="stat"><strong id="nQuotes">0</strong><span>Citas</span></div><div class="stat"><strong id="nNotes">0</strong><span>Notas</span></div></section>
+<div class="row"><h1 id="pageTitle">Mi biblioteca</h1><button id="newBook">＋ Agregar libro</button></div>
+<div class="toolbar"><input id="search" placeholder="Buscar título, autor, cita, nota o tema…"><select id="filter"><option value="Todos">Todos los estados</option><option>Quiero leer</option><option>Estoy leyendo</option><option>Terminado</option></select></div>
+<nav class="tabs"><button class="tab active" data-tab="books">Biblioteca</button><button class="tab" data-tab="quotes">Citas</button><button class="tab" data-tab="notes">Notas</button><button class="tab" data-tab="authors">Autores</button></nav>
+<section id="view"></section>
+<section class="panel" style="margin-top:22px"><h2>Respaldo de tu bitácora</h2><p class="muted">Tus registros se guardan en este navegador. Exportá una copia periódicamente. La sincronización entre dispositivos todavía no está incluida: requiere almacenamiento en la nube y una cuenta o servicio externo.</p><button class="light" id="export">Exportar copia (.json)</button> <label class="btn light" for="importFile" style="display:inline-block;cursor:pointer">Importar copia</label><input id="importFile" type="file" accept="application/json" hidden></section>
+</main><footer>Entre páginas · Una biblioteca de tus propias lecturas</footer>
+
+<div class="modal" id="bookModal"><div class="dialog"><div class="dialoghead"><h2 id="bookModalTitle">Agregar libro</h2><button class="light sm" data-close="bookModal">Cerrar</button></div><form id="bookForm"><input type="hidden" id="bookId"><div class="formgrid">
+<div><label>Título *</label><input id="title" required></div><div><label>Autor *</label><input id="author" required></div>
+<div><label>Género</label><input id="genre" placeholder="Novela, poesía, ensayo…"></div><div><label>Estado</label><select id="status"><option>Quiero leer</option><option>Estoy leyendo</option><option>Terminado</option></select></div>
+<div><label>Editorial</label><input id="publisher"></div><div><label>Año</label><input id="year" type="number" min="0" max="2100"></div>
+<div><label>Fecha de inicio</label><input id="startDate" type="date"></div><div><label>Fecha de finalización</label><input id="endDate" type="date"></div>
+<div><label>Calificación</label><select id="rating"><option value="">Sin calificar</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div><div><label>Web del autor (URL)</label><input id="authorUrl" type="url" placeholder="https://…"></div>
+<div><label>Portada desde archivo (imagen)</label><input id="coverFile" type="file" accept="image/*"></div><div><label>O URL de portada</label><input id="coverUrl" type="url" placeholder="https://…"></div>
+<div class="full"><label>Comentario general del libro</label><textarea id="bookComment"></textarea></div>
+</div><p class="muted">Consejo: elegí una imagen de portada liviana para no ocupar demasiado espacio del navegador.</p><div style="margin-top:14px;display:flex;gap:8px"><button>Guardar libro</button><button type="button" class="light" data-close="bookModal">Cancelar</button></div></form></div></div>
+
+<div class="modal" id="entryModal"><div class="dialog"><div class="dialoghead"><h2 id="entryTitle">Nueva entrada</h2><button class="light sm" data-close="entryModal">Cerrar</button></div><form id="entryForm"><input type="hidden" id="entryType"><input type="hidden" id="entryId"><div class="formgrid">
+<div class="full"><label>Libro *</label><select id="entryBook" required></select></div>
+<div class="full" id="entryTitleWrap"><label>Título de la nota</label><input id="entryHeading"></div>
+<div class="full"><label id="entryTextLabel">Texto *</label><div id="entryText" class="rich" contenteditable="true" data-placeholder="Escribí aquí…"></div></div>
+<div id="pageWrap"><label>Número de página</label><input id="entryPage"></div><div id="topicWrap"><label>Tema / etiquetas</label><input id="entryTopic" placeholder="Memoria, amor, identidad…"></div>
+<div class="full"><label>Comentario personal (opcional)</label><textarea id="entryComment"></textarea></div>
+</div><div style="margin-top:14px;display:flex;gap:8px"><button>Guardar</button><button type="button" class="light" data-close="entryModal">Cancelar</button></div></form></div></div>
+
+<div class="modal" id="authorModal"><div class="dialog"><div class="dialoghead"><h2>Ficha del autor</h2><button class="light sm" data-close="authorModal">Cerrar</button></div><form id="authorForm"><input type="hidden" id="authorNameKey"><div class="formgrid">
+<div class="full"><label>Nombre del autor</label><input id="authorName" required></div><div><label>País de origen</label><input id="authorCountry"></div><div><label>Web oficial</label><input id="authorWeb" type="url" placeholder="https://…"></div>
+<div class="full"><label>Biografía / datos de interés</label><textarea id="authorBio"></textarea></div><div class="full"><label>Fotografía (opcional)</label><input id="authorPhoto" type="file" accept="image/*"></div>
+</div><div style="margin-top:14px"><button>Guardar ficha</button></div></form></div></div>
+
+<script>
+const KEY='entrePaginas_v2';let data=load(),tab='books',pendingCover='';
+function load(){try{let d=JSON.parse(localStorage.getItem(KEY));if(d)return d;let old=JSON.parse(localStorage.getItem('entrePaginas_v1'));return old?{...old,authors:{}}:{books:[],quotes:[],notes:[],authors:{}}}catch(e){return{books:[],quotes:[],notes:[],authors:{}}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data));render()}catch(e){alert('No hay espacio suficiente en el navegador. Probá con imágenes más pequeñas o eliminá alguna portada/fotografía.');}}
+const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function bookLabel(id){let b=data.books.find(x=>x.id===id);return b?b.title+' — '+b.author:'Libro eliminado'}
+function authorData(name){return data.authors[name]||{}}
+function render(){
+ $('nBooks').textContent=data.books.length;$('nReading').textContent=data.books.filter(b=>b.status==='Estoy leyendo').length;$('nQuotes').textContent=data.quotes.length;$('nNotes').textContent=data.notes.length;
+ document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));
+ $('pageTitle').textContent={books:'Mi biblioteca',quotes:'Mis citas literarias',notes:'Notas y reflexiones',authors:'Mis autores'}[tab];
+ $('newBook').style.display=tab==='books'?'':'none';$('filter').style.display=tab==='books'?'':'none';
+ let q=$('search').value.toLowerCase(),f=$('filter').value,v=$('view');
+ if(tab==='books'){
+ let a=data.books.filter(b=>(f==='Todos'||b.status===f)&&[b.title,b.author,b.genre,b.bookComment].join(' ').toLowerCase().includes(q));
+ v.innerHTML=a.length?'<div class="books">'+a.map(b=>`<article class="book"><div class="cover">${b.cover?`<img src="${b.cover}" alt="Portada de ${esc(b.title)}">`:b.coverUrl?`<img src="${esc(b.coverUrl)}" onerror="this.remove();this.parentNode.textContent='Sin portada'">`:'Sin portada'}</div><div style="min-width:0"><h3>${esc(b.title)}</h3><p>${esc(b.author)}</p><p>${esc([b.genre,b.year].filter(Boolean).join(' · '))}</p><span class="badge">${esc(b.status)}</span>${b.rating?` <span class="badge">★ ${b.rating}/5</span>`:''}<div class="actions"><button class="sm" onclick="editBook('${b.id}')">Editar</button><button class="sm light" onclick="newEntry('quote','${b.id}')">＋ Cita</button><button class="sm light" onclick="newEntry('note','${b.id}')">＋ Nota</button><button class="sm light" onclick="showBook('${b.id}')">Ver ficha</button></div></div></article>`).join('')+'</div>':'<div class="empty">No hay libros que coincidan. Agregá tu primera lectura.</div>';
+ }else if(tab==='quotes'){
+ let a=data.quotes.filter(x=>(x.text+' '+x.comment+' '+x.topic+' '+bookLabel(x.bookId)).toLowerCase().includes(q));
+ v.innerHTML=`<div class="row"><h2>Citas guardadas</h2><button onclick="newEntry('quote')">＋ Agregar cita</button></div>`+(a.length?a.map(x=>`<article class="item"><div class="itemhead"><div><blockquote>“${x.text}”</blockquote><p>${esc(bookLabel(x.bookId))} · ${x.page?'Página '+esc(x.page):'Sin página'} ${x.topic?'· '+esc(x.topic):''}</p>${x.comment?`<p><em>${x.comment}</em></p>`:''}</div><div class="actions"><button class="sm light" onclick="editEntry('quote','${x.id}')">Editar</button><button class="sm red" onclick="delEntry('quotes','${x.id}')">Eliminar</button></div></div></article>`).join(''):'<div class="empty">Aún no guardaste citas.</div>');
+ }else if(tab==='notes'){
+ let a=data.notes.filter(x=>(x.heading+' '+x.text+' '+x.comment+' '+bookLabel(x.bookId)).toLowerCase().includes(q));
+ v.innerHTML=`<div class="row"><h2>Notas y reflexiones</h2><button onclick="newEntry('note')">＋ Nueva nota</button></div>`+(a.length?a.map(x=>`<article class="item"><div class="itemhead"><div><h3 style="margin:0 0 4px">${esc(x.heading||'Nota personal')}</h3><p>${esc(bookLabel(x.bookId))} · ${esc(x.date||'')}</p><div>${x.text}</div>${x.comment?`<p><em>${x.comment}</em></p>`:''}</div><div class="actions"><button class="sm light" onclick="editEntry('note','${x.id}')">Editar</button><button class="sm red" onclick="delEntry('notes','${x.id}')">Eliminar</button></div></div></article>`).join(''):'<div class="empty">Todavía no hay notas.</div>');
+ }else{
+ let names=[...new Set(data.books.map(b=>b.author))].filter(n=>n.toLowerCase().includes(q));
+ v.innerHTML=`<div class="row"><h2>Autores de tu biblioteca</h2></div>`+(names.length?names.map(n=>{let a=authorData(n),count=data.books.filter(b=>b.author===n).length;return `<article class="item authorcard">${a.photo?`<img class="authorpic" src="${a.photo}">`:'<div class="authorpic"></div>'}<div style="flex:1"><h3 style="margin:0">${esc(n)}</h3><p>${esc(a.country||'')} · ${count} libro(s)</p>${a.bio?`<p>${esc(a.bio)}</p>`:''}${a.web?`<p><a class="link" target="_blank" rel="noopener" href="${esc(a.web)}">Visitar web ↗</a></p>`:''}<button class="sm light" onclick="editAuthor('${encodeURIComponent(n)}')">Editar ficha</button></div></article>`}).join(''):'<div class="empty">Los autores aparecerán cuando agregues libros.</div>');
+ }
+}
+function open(id){$(id).classList.add('show')}function close(id){$(id).classList.remove('show')}
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>close(b.dataset.close));
+function set(id,v){$(id).value=v??''}
+function resetBook(){ $('bookForm').reset();set('bookId','');pendingCover='';$('bookModalTitle').textContent='Agregar libro'}
+$('newBook').onclick=()=>{resetBook();open('bookModal')};
+function editBook(id){let b=data.books.find(x=>x.id===id);if(!b)return;resetBook();$('bookModalTitle').textContent='Editar libro';set('bookId',id);['title','author','genre','status','publisher','year','startDate','endDate','rating','authorUrl','coverUrl','bookComment'].forEach(k=>set(k,b[k]));pendingCover=b.cover||'';open('bookModal')}
+function readFile(file){return new Promise((resolve,reject)=>{if(!file)return resolve('');let r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
+$('bookForm').onsubmit=async e=>{e.preventDefault();let id0=$('bookId').value,old=data.books.find(x=>x.id===id0)||{},b={id:id0||uid(),cover:pendingCover};for(let k of ['title','author','genre','status','publisher','year','startDate','endDate','rating','authorUrl','coverUrl','bookComment'])b[k]=$(k).value;b.cover=await readFile($('coverFile').files[0])||pendingCover;let i=data.books.findIndex(x=>x.id===id0);if(i>=0)data.books[i]=b;else data.books.unshift(b);save();close('bookModal');if(!data.authors[b.author])data.authors[b.author]={};};
+function newEntry(type,bid=''){if(!data.books.length){alert('Primero agregá un libro.');return} $('entryForm').reset();set('entryType',type);set('entryId','');$('entryText').innerHTML='';$('entryBook').innerHTML=data.books.map(b=>`<option value="${b.id}" ${b.id===bid?'selected':''}>${esc(b.title)} — ${esc(b.author)}</option>`).join('');$('entryTitle').textContent=type==='quote'?'Agregar cita':'Nueva nota';$('entryTitleWrap').style.display=type==='note'?'':'none';$('pageWrap').style.display=type==='quote'?'':'none';$('topicWrap').style.display=type==='quote'?'':'none';$('entryTextLabel').textContent=type==='quote'?'Texto de la cita *':'Contenido de la nota *';open('entryModal')}
+function editEntry(type,id){let list=type==='quote'?data.quotes:data.notes,x=list.find(y=>y.id===id);if(!x)return;newEntry(type,x.bookId);set('entryId',id);set('entryHeading',x.heading);$('entryText').innerHTML=x.text;set('entryPage',x.page);set('entryTopic',x.topic);set('entryComment',x.comment);$('entryTitle').textContent=type==='quote'?'Editar cita':'Editar nota'}
+$('entryForm').onsubmit=e=>{e.preventDefault();let type=$('entryType').value,id0=$('entryId').value,record={id:id0||uid(),bookId:$('entryBook').value,text:$('entryText').innerHTML,comment:$('entryComment').value};if(!record.text.trim()){alert('Escribí el contenido antes de guardar.');return}if(type==='quote'){record.page=$('entryPage').value;record.topic=$('entryTopic').value;let i=data.quotes.findIndex(x=>x.id===id0);if(i>=0)data.quotes[i]=record;else data.quotes.unshift(record)}else{record.heading=$('entryHeading').value;record.date=new Date().toLocaleDateString('es-AR');let i=data.notes.findIndex(x=>x.id===id0);if(i>=0){record.date=data.notes[i].date;data.notes[i]=record}else data.notes.unshift(record)}save();close('entryModal')};
+function delEntry(type,id){if(confirm('¿Eliminar este registro?')){data[type]=data[type].filter(x=>x.id!==id);save()}}
+function showBook(id){let b=data.books.find(x=>x.id===id);if(!b)return;let author=authorData(b.author);alert(`${b.title}\n${b.author}\n\n${b.bookComment||'Sin comentario general.'}\n\n${author.bio||''}\n${b.authorUrl||author.web||''}`)}
+function editAuthor(encoded){let name=decodeURIComponent(encoded),a=authorData(name);$('authorForm').reset();set('authorNameKey',name);set('authorName',name);set('authorCountry',a.country);set('authorWeb',a.web);set('authorBio',a.bio);open('authorModal')}
+$('authorForm').onsubmit=async e=>{e.preventDefault();let old=$('authorNameKey').value,name=$('authorName').value.trim(),a=data.authors[old]||{};a.country=$('authorCountry').value;a.web=$('authorWeb').value;a.bio=$('authorBio').value;a.photo=await readFile($('authorPhoto').files[0])||a.photo||'';data.authors[name]=a;if(old!==name){delete data.authors[old];data.books.forEach(b=>{if(b.author===old)b.author=name})}save();close('authorModal')};
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render()});$('search').oninput=render;$('filter').onchange=render;
+$('export').onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='entre-paginas-respaldo.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+$('importFile').onchange=e=>{let file=e.target.files[0];if(!file)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d.books)||!Array.isArray(d.quotes)||!Array.isArray(d.notes))throw 0;if(confirm('La importación reemplazará los datos actuales. ¿Continuar?')){data={authors:{},...d};save();alert('Copia importada.')}}catch(err){alert('El archivo no es una copia válida.')}e.target.value=''};r.readAsText(file)};
+render();
+</script><script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(err => console.warn("No se pudo activar el modo sin conexión:", err));
+  });
+}
+</script>
+</body></html>

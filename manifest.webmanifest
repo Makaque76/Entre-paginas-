@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "Entre páginas - Bitácora de lectura",
+  "short_name": "Entre páginas",
+  "description": "Tu biblioteca personal de libros, citas y reflexiones.",
+  "lang": "es-AR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7f3e9",
+  "theme_color": "#344638",
+  "icons": [
+    {"src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}
+  ]
+}
